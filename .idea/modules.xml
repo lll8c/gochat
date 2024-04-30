@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../bluebell/.idea/bluebell.iml" filepath="$PROJECT_DIR$/../bluebell/.idea/bluebell.iml" />
+      <module fileurl="file://$USER_HOME$/Desktop/t/ginchat/.idea/ginchat.iml" filepath="$USER_HOME$/Desktop/t/ginchat/.idea/ginchat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/gochat.iml" filepath="$PROJECT_DIR$/.idea/gochat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../project1/.idea/project1.iml" filepath="$PROJECT_DIR$/../project1/.idea/project1.iml" />
+    </modules>
+  </component>
+</project>

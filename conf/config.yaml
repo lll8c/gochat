@@ -1,0 +1,30 @@
+name: "web_app"
+mode: "dev"
+port: 8080
+version: "v0.0.1"
+start_time: "2020-07-01"
+machine_id: 1
+
+auth:
+  jwt_expire: 8760
+log:
+  level: "debug"
+  filename: "web_app.log"
+  max_size: 200
+  max_age: 30
+  max_backups: 7
+mysql:
+  dsn: "root:123@tcp(127.0.0.1:3306)/gochat?charset=utf8mb4&parseTime=True&loc=Local"
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "123"
+  dbname: "gochat"
+  max_open_conns: 200
+  max_idle_conns: 10
+redis:
+  addr: "192.168.83.1:6379"
+  password: ""
+  db: 0
+  pool_size: 30
+  min_idle_conns: 30
