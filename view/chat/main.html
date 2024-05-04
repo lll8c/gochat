@@ -1,6 +1,6 @@
 {{define "/chat/main.shtml"}}
 <!--聊天页面-->
-<div v-show="win!='main'">
+<div v-show="win == 'single' || win == 'group'">
 <header class="mui-bar mui-bar-nav">
     <a class="mui-icon mui-icon-left-nav mui-pull-left" @tap="win='main'"></a>
     <h1 class="mui-title" v-text="title"></h1>
@@ -16,10 +16,13 @@
 		<!--dstid>TargetId  11=2  10=1 -->
 		<!-- v-if="(item.ismine? item.msg.TargetId==msgcontext.TargetId : item.msg.userId==msgcontext.TargetId )" -->
         <li class="chat " :class="item.ismine?'mine':'other'" v-for="item in msglist"
-            v-if="(item.ismine? item.msg.TargetId==msgcontext.TargetId : item.msg.userId==msgcontext.TargetId )">
+            v-if=" item.msg.Type==msgcontext.Type
+                    && ((item.msg.Type==1) && (item.ismine? item.msg.TargetId==msgcontext.TargetId : item.msg.userId==msgcontext.TargetId ))
+                    || ((item.msg.Type==2) && ( item.msg.TargetId==msgcontext.TargetId ))
+                    ">
 
         <div >
-            <img class="avatar" :src="item.user.avatar ||'/asset/images/avatar0.png'" />
+            <img class="avatar" :src="item.user.Avatar ||'/asset/images/avatar0.png'" />
         </div>
 
         <span ></span>

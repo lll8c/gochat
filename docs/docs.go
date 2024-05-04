@@ -15,6 +15,66 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/contact/addFriend": {
+            "post": {
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "添加好友",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userID",
+                        "name": "userId",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "targetID",
+                        "name": "targetId",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/contact/createCommunity": {
+            "post": {
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "创建群",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ownerId",
+                        "name": "ownerId",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "code\",\"message\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/index": {
             "get": {
                 "tags": [

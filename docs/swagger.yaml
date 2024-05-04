@@ -1,6 +1,44 @@
 info:
   contact: {}
 paths:
+  /contact/addFriend:
+    post:
+      parameters:
+      - description: userID
+        in: formData
+        name: userId
+        type: string
+      - description: targetID
+        in: formData
+        name: targetId
+        type: string
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: string
+      summary: 添加好友
+      tags:
+      - 用户模块
+  /contact/createCommunity:
+    post:
+      parameters:
+      - description: ownerId
+        in: formData
+        name: ownerId
+        type: string
+      - description: name
+        in: formData
+        name: name
+        type: string
+      responses:
+        "200":
+          description: code","message"}
+          schema:
+            type: string
+      summary: 创建群
+      tags:
+      - 用户模块
   /index:
     get:
       responses:

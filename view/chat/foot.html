@@ -4,8 +4,8 @@
 
     function upload(dom){
         uploadfile("attach/upload",dom,function(res){
-            if(res.code==0){
-                app.sendpicmsg(res.data)
+            if(res.Code==0){
+                app.sendpicmsg(res.Data)
             }
 
         })
@@ -27,6 +27,15 @@
                     },
                     webSocket:{},
                     win:"main",
+                    com: {  //群聊
+                        "ownerId": "",
+                        "icon":"",
+                        "cate":"",
+                        "name":"",
+                        "memo":"",
+                        "desc":"",
+                    },
+                    isDisable: true,
                     txtmsg:"",
                     panelstat:"kbord",
                     txtstat:"kbord",
@@ -152,7 +161,7 @@
                                         console.log("ondataavailable");
                                         uploadblob("attach/upload",event.data,".mp3",res=>{
                                             var duration = Math.ceil((new Date().getTime()-this.duration)/1000);
-                                            this.sendaudiomsg(res.data,duration);
+                                            this.sendaudiomsg(res.Data,duration);
                                         })
                                         stream.getTracks().forEach(function (track) {
                                             track.stop();
@@ -202,7 +211,8 @@
                         var that = this;
                         for(var id in res){
                             //console.log("res[i]",id,res[id])
-                            post(res[id],{},function(pkginfo){
+                            this.$http.get(res[id]).then(response => {
+                                pkginfo = response.data
                                 //console.log("post res[i]",id,res[id],pkginfo)
                                 var baseurl= config.baseurl+"/"+pkginfo.id+"/"
                                 for(var j in pkginfo.assets){
@@ -240,22 +250,27 @@
                     startrecord:function(){
 
                     },
-                    //发送消息
+                    //发送消息 私信、群聊
                     sendtxtmsg:function(txt){
-                        //{id:1,userid:2,dstid:3,cmd:10,media:1,content:"hello"}
-                        var msg =this.createmsgcontext();
-                        msg.Media=1;
-                        msg.Content=txt;
-                        this.showmsg(userInfo(),msg);
-                        this.webSocket.send(JSON.stringify(msg))
+                        if(this.isDisable) {
+                            this.setTimeFlag()
+                            var msg = this.createmsgcontext();
+                            msg.Media = 1;
+                            msg.Content = txt;
+                            this.showmsg(userInfo(), msg);
+                            this.webSocket.send(JSON.stringify(msg))
+                        }
                     },
                     sendpicmsg:function(picurl){
-                        //{id:1,userid:2,dstid:3,cmd:10,media:4,url:"http://www.baidu.com/a/log,jpg"}
-                        var msg =this.createmsgcontext();
-                        msg.Media=4;
-                        msg.url=picurl;
-                        this.showmsg(userInfo(),msg)
-                        this.webSocket.send(JSON.stringify(msg))
+                        if(this.isDisable) {
+                            this.setTimeFlag()
+                            //{id:1,userid:2,dstid:3,cmd:10,media:4,url:"http://www.baidu.com/a/log,jpg"}
+                            var msg = this.createmsgcontext();
+                            msg.Media = 4;
+                            msg.url = picurl;
+                            this.showmsg(userInfo(), msg)
+                            this.webSocket.send(JSON.stringify(msg))
+                        }
                     },
                     sendaudiomsg:function(url,num){
                         //{id:1,userid:2,dstid:3,cmd:10,media:3,url:"http://www.a,com/dsturl.mp3",anount:40}
@@ -268,26 +283,30 @@
                         this.webSocket.send(JSON.stringify(msg))
                     },
                     singlemsg:function(user){
-                        //console.log(user)
-                        this.win = "single";
-                        this.title = "和"+user.Name+"聊天中";
-                        this.msgcontext.TargetId = parseInt(user.ID);
-                        this.msgcontext.Type = 1;
+                        if(this.isDisable) {
+                            this.setTimeFlag()
+                            this.win = "single";
+                            this.title = "和" + user.Name + "聊天中";
+                            this.msgcontext.TargetId = parseInt(user.ID);
+                            this.msgcontext.Type = 1;
+                        }
                     },
                     groupmsg:function(group){
-
-                        this.win = "group";
-                        this.title=group.name;
-                        this.msgcontext.TargetId = parseInt(group.id);
-                        this.msgcontext.Type = 11;
+                        if(this.isDisable) {
+                            this.setTimeFlag()
+                            this.win = "group";
+                            this.title = group.Name;
+                            this.msgcontext.TargetId = parseInt(group.ID);
+                            this.msgcontext.Type = 2;
+                        }
                     },
                     loaduserinfo:function(userid,cb){
                         userid = ""+userid;
                         var userinfo = this.usermap[userid];
                         if(!userinfo){
-                            post("user/find",{id:parseInt(userid)},function(res){
-                                cb(res.data);
-                                this.usermap[userid] = res.data;
+                            post("user/find",{userId:parseInt(userid)},function(res){
+                                cb(res.Data);
+                                this.usermap[userid] = res.Data;
                             }.bind(this))
                         }else{
                             cb(userinfo)
@@ -341,8 +360,8 @@
                     },
                     loadcommunitys:function(){
                         var that = this;
-                        post("contact/loadcommunity",{userId:userId()},function(res){
-                            that.communitys = res.rows ||[];
+                        post("loadCommunity",{userId:userId()},function(res){
+                            that.communitys = res.Rows ||[];
                         })
                     },
                     addfriend:function(){
@@ -363,27 +382,86 @@
                         document.querySelector('.mui-popup-input input').type = 'number';
                     },
                     _addfriend:function(dstobj){
-                        var that = this
-                        post("contact/addfriend",{dstid:dstobj,userid: userId()},function(res){
-                            if(res.code==0){
-                                mui.toast("添加成功");
-                                that.loadfriends();
-                            }else{
-                                mui.toast(res.msg);
+                        //解决一次点击，两次调用该函数的问题
+                        if(this.isDisable) {
+                            this.setTimeFlag()
+                            var that = this
+                            post("contact/addFriend", {targetID: dstobj, userID: userId()}, function (res) {
+                                if (res.Code == 0) {
+                                    mui.toast("添加成功");
+                                    that.loadfriends();
+                                } else {
+                                    mui.toast(res.Msg);
+                                }
+                            })
+                        }
+                    },
+                    //个人资料修改显示
+                    setUserInfo: function () {
+                        this.win = "userinfo"
+                        //  console.log("createCom")
+                    },
+                    //新建群显示
+                    createCom: function () {
+                        this.win = "community"
+                        mui.toast(this.win);
+                    },
+
+                    //新建群提交
+                    createCommunity() {
+                        //console.log("createCommunity")
+                        this.com.ownerId = userId()
+                        console.log(this.com)
+                        util.post("/contact/createCommunity", this.com).then(res => {
+                            console.log(res)
+                            if (res.Code != 0) {
+                                mui.toast(res.Msg)
+                            } else {
+                                //location.replace("localhost:8081")
+                                //location.href = "/"
+                                mui.toast("建群成功")
+                                this.loadcommunitys();
+                                //goBack()
                             }
                         })
                     },
-                    _joincomunity:function(dstobj){
-                        var that = this;
-                        post("contact/joincommunity",{dstid:dstobj,"userid":userId()},function(res){
-                            if(res.code==0){
-                                mui.toast("添加成功");
-
-                                that.loadcommunitys();
-                            }else{
-                                mui.toast(res.msg);
+                    updateUserInfo() {
+                        //console.log("createcommunity")
+                        this.info.id = userId()
+                        util.post("/user/updateUser", this.info).then(res => {
+                            console.log(res)
+                            let userInfo = JSON.parse(sessionStorage.getItem('userinfo') || '{}');
+                            userInfo.Avatar = this.info.icon;
+                            userInfo.Name = this.info.name;
+                            sessionStorage.setItem('userinfo', JSON.stringify(userInfo))
+                            if (res.Code != 0) {
+                                mui.toast(res.message)
+                            } else {
+                                //location.replace("localhost:8081")
+                                //location.href = "/"
+                                mui.toast("修改成功")
+                                //goBack()
                             }
                         })
+                    },
+                    //回到聊天首页
+                    goBack() {
+                        this.win = "main"
+                    },
+                    _joincomunity:function(dstobj){
+                        //解决一次点击，两次调用该函数的问题
+                        if(this.isDisable) {
+                            this.setTimeFlag()
+                            var that = this;
+                            post("contact/joinGroup", {comId: dstobj, "userId": userId()}, function (res) {
+                                if (res.Code == 0) {
+                                    mui.toast("添加成功");
+                                    that.loadcommunitys();
+                                } else {
+                                    mui.toast(res.Msg);
+                                }
+                            })
+                        }
                     },
                     joincomunity:function(){
                         var that = this;
@@ -405,9 +483,15 @@
                         sessionStorage.removeItem("userid")
                         sessionStorage.removeItem("userinfo")
                         location.href="login.shtml"
-                    }
+                    },
 
-
+                    setTimeFlag() {
+                        this.isDisable = false;
+                        setTimeout(()=>{
+                                this.isDisable = true;
+                            },100
+                        )
+                    },
                 },
                 watch:{
                     "win":function(n,o){

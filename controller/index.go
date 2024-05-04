@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"fmt"
 	"gochat/models"
+	"gochat/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -33,4 +35,26 @@ func ToChat(c *gin.Context) {
 // InitWebSocket 建立WebSocket连接
 func InitWebSocket(c *gin.Context) {
 	models.Chat(c.Writer, c.Request)
+}
+
+// SearchFriends 进入chat主页时，查询所有好友
+func SearchFriends(c *gin.Context) {
+	str := c.PostForm("userId")
+	userID, _ := strconv.Atoi(str)
+	//fmt.Println(userID)
+	users := models.SearchFriend(uint(userID))
+	utils.RespOKList(c.Writer, users, len(users))
+}
+
+// LoadCommunity 进入chat主页时，加载所有群聊
+func LoadCommunity(c *gin.Context) {
+	str := c.PostForm("userId")
+	userID, _ := strconv.Atoi(str)
+	data := models.SearchCommunity(uint(userID))
+	if len(data) == 0 {
+		utils.RespFail(c.Writer, "暂无群聊")
+	} else {
+		utils.RespOKList(c.Writer, data, len(data))
+	}
+	fmt.Println(data)
 }

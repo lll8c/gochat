@@ -81,6 +81,13 @@ func CreateUser(c *gin.Context) {
 	})
 }
 
+// FindById 根据id查找用户
+func FindById(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.PostForm("userId"))
+	data := models.FindByID(uint(userId))
+	utils.RespOK(c.Writer, "ok", data)
+}
+
 // FindUserByNameAndPwd
 // @Summary 登录
 // @Tags 用户模块

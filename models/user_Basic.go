@@ -3,8 +3,9 @@ package models
 import (
 	"fmt"
 	"gochat/utils"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type UserBasic struct {
@@ -12,6 +13,7 @@ type UserBasic struct {
 	Password      string
 	Phone         string `valid:"matches(^1[3-9]{1}\\d)"`
 	Email         string `valid:"email"`
+	Avatar        string //头像
 	Identity      string //token字符串
 	ClientIP      string
 	ClientPort    string

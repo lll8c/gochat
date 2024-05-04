@@ -16,8 +16,8 @@ import (
 // Message 消息
 type Message struct {
 	gorm.Model
-	UserId     int64  //发送者
-	TargetId   int64  //接受者
+	UserId     uint   //发送者
+	TargetId   uint   //接受者
 	Type       int    //发送类型  1私聊  2群聊  3心跳
 	Media      int    //消息类型  1文字 2表情包 3语音 4图片/表情包
 	Content    string //消息内容
@@ -41,7 +41,7 @@ type Node struct {
 
 var (
 	// 存每个用户id与服务器连接节点的映射
-	clientMap map[int64]*Node = make(map[int64]*Node, 0)
+	clientMap map[uint]*Node = make(map[uint]*Node, 0)
 	//广播消息发送管道
 	udpSendChan chan []byte = make(chan []byte, 1024)
 	//读写锁
@@ -58,7 +58,7 @@ func init() {
 func Chat(writer http.ResponseWriter, request *http.Request) {
 	//1.获取参数并检验token等合法性
 	query := request.URL.Query()
-	userId, _ := strconv.ParseInt(query.Get("userId"), 10, 64)
+	userId, _ := strconv.Atoi(query.Get("userId"))
 	isvalida := true //checkToke()
 	//升级为websocket连接，进行token校验
 	conn, err := (&websocket.Upgrader{
@@ -78,7 +78,7 @@ func Chat(writer http.ResponseWriter, request *http.Request) {
 		GroupSets: set.New(set.ThreadSafe),
 	}
 	rwLocker.Lock()
-	clientMap[userId] = node
+	clientMap[uint(userId)] = node
 	rwLocker.Unlock()
 	//用户关系
 	//fmt.Println("userId=", userId)
@@ -87,7 +87,7 @@ func Chat(writer http.ResponseWriter, request *http.Request) {
 	go recvProc(node)
 	//加入在线用户到缓存
 	//SetUserOnlineInfo("online_"+Id, []byte(node.Addr), time.Duration(viper.GetInt("timeout.RedisOnlineTime"))*time.Hour)
-	sendMsg(userId, []byte("欢迎进入聊天系统"))
+	sendMsg(uint(userId), []byte("欢迎进入聊天系统"))
 }
 
 // 发送逻辑
@@ -95,7 +95,7 @@ func sendProc(node *Node) {
 	for {
 		select {
 		case data := <-node.DataQueue:
-			fmt.Println("sendProc >>>>", string(data))
+			//fmt.Println("sendProc >>>>", string(data))
 			err := node.Conn.WriteMessage(websocket.TextMessage, data)
 			if err != nil {
 				fmt.Println("writeMessage err:", err)
@@ -142,7 +142,7 @@ func udpRecvProc() {
 			fmt.Println(err)
 			return
 		}
-		fmt.Println("udpRecvProc data:", string(buf[:]))
+		//fmt.Println("udpRecvProc data:", string(buf[:]))
 		dispatch(buf[:n])
 	}
 }
@@ -164,7 +164,7 @@ func udpSendProc() {
 	for {
 		select {
 		case data := <-udpSendChan:
-			fmt.Println("udpSendProc:", string(data))
+			//fmt.Println("udpSendProc:", string(data))
 			_, err := con.Write(data)
 			if err != nil {
 				fmt.Println("con.write err:", err)
@@ -187,16 +187,32 @@ func dispatch(data []byte) {
 		fmt.Println("dispatch data:", string(data))
 		sendMsg(msg.TargetId, data)
 	case 2: //群发
-		//sendGroupMsg()
+		sendGroupMsg(msg.UserId, msg.TargetId, data)
 	case 3:
 		//sendAllMsg()
 	case 4:
 	}
 }
 
+// 群发
+func sendGroupMsg(userId uint, groupId uint, msg []byte) {
+	fmt.Println("sendGroupMsg:", string(msg))
+	//获取所有群成员id
+	contacts := FindContactByGroupId(groupId)
+	//向所有群成员发送该消息
+	for _, v := range contacts {
+		//不能发送给自己
+		if userId == v.OwnerId {
+			continue
+		}
+		fmt.Println("sendGroupMsg to: ", v.OwnerId)
+		sendMsg(v.OwnerId, msg)
+	}
+}
+
 // 私聊
-func sendMsg(targetId int64, msg []byte) {
-	fmt.Println("sendMsg >>> targetId:", targetId, "msg:", string(msg))
+func sendMsg(targetId uint, msg []byte) {
+	fmt.Println("sendMsg to targetId:", targetId, "msg:", string(msg))
 	rwLocker.RLock()
 	node, ok := clientMap[targetId]
 	rwLocker.RUnlock()
