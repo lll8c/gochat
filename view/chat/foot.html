@@ -112,13 +112,14 @@
                     this.loadfriends();
                     this.loadcommunitys();
                     this.loaddoutures();
+                    //每隔一段时间更新已在线用户心跳
+                    setInterval(this.heartbeat, 30*1000)
                     var user = userInfo()
                     if(!!user){
-                        this.profile.avatar = user.avatar;
-                        this.profile.nickname = user.nickname;
-                        this.profile.memo = user.memo;
+                        this.profile.avatar = user.Avatar;
+                        this.profile.nickname = user.Name;
+                        this.profile.memo = user.Phone;
                     }
-
                     this.initwebsocket()
 
                 },
@@ -333,7 +334,7 @@
                         }.bind(this)
                         //关闭回调
                         this.webSocket.onclose=function (evt) {
-                            console.log(evt.data)
+                            console.log("用户已下线")
                         }
                         //出错回调
                         this.webSocket.onerror=function (evt) {
@@ -492,7 +493,20 @@
                             },100
                         )
                     },
+                    //发送心跳消息更新后端心跳时间
+                    heartbeat() {
+                        if (this.webSocket.readyState==1) {
+                            var msg = this.createmsgcontext();
+                            msg.Type = 3;
+                            msg.Media = 1;
+                            msg.Content = "心跳";
+                            this.showmsg(userInfo(), msg);
+                            this.webSocket.send(JSON.stringify(msg))
+                        }
+                    }
                 },
+
+
                 watch:{
                     "win":function(n,o){
                        // console.log("watch",o,n)

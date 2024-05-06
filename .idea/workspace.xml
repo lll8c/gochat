@@ -4,49 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1144e5c8-d2a7-4031-8ebc-f25fe1ed7003" name="Changes" comment="上传文件">
-      <change afterPath="$PROJECT_DIR$/controller/attach.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/controller/community.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/community.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/view/chat/userinfo.html" afterDir="false" />
+    <list default="true" id="1144e5c8-d2a7-4031-8ebc-f25fe1ed7003" name="Changes" comment="群发消息">
+      <change afterPath="$PROJECT_DIR$/models/node.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/redis_cache.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/task_init.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16548477521298498081.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16551060291474941318.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16575434331298498081.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576286361298498081.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576286892019727887.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576287601427131847.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/1657628846939984059.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576302701298498081.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576302972019727887.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576304191298498081.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576304952019727887.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576343402019727887.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576344051427131847.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16576939821298498081.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16577798831298498081.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16577799312019727887.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16579629431427131847.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/1657973942939984059.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/1657973946911902081.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/asset/upload/16579741801474941318.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/contact.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/contact.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/index.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/index.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/userservice.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/userservice.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/docs/docs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/contact.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/contact.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/user_Basic.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/user_Basic.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/createcom.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/createcom.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/chat/concat.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/concat.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/chat/foot.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/foot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/group.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/group.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,7 +189,8 @@
     </ignored-roots>
     <MESSAGE value="first commit" />
     <MESSAGE value="上传文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="上传文件" />
+    <MESSAGE value="群发消息" />
+    <option name="LAST_COMMIT_MESSAGE" value="群发消息" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

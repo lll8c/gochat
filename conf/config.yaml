@@ -23,8 +23,13 @@ mysql:
   max_open_conns: 200
   max_idle_conns: 10
 redis:
-  addr: "192.168.83.1:6379"
+  addr: "127.0.0.1:6379"
   password: ""
   db: 0
   pool_size: 30
   min_idle_conns: 30
+timeout:
+  DelayHeartBeatTime: 3   #刚开始进行心跳检测的延迟时间
+  HeartBeatMaxTime: 30000    #连接最大保留时间
+  HeartBeatHZ: 30          #多久检测一次心跳时间
+  RedisOnlineTime: 4      #缓存的在线用户时长 h

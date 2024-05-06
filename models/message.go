@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"net/http"
-	"strconv"
 	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
-	"gopkg.in/fatih/set.v0"
 	"gorm.io/gorm"
 )
 
@@ -33,62 +31,12 @@ func (table *Message) TableName() string {
 	return "message"
 }
 
-type Node struct {
-	Conn      *websocket.Conn
-	DataQueue chan []byte
-	GroupSets set.Interface
-}
-
 var (
-	// 存每个用户id与服务器连接节点的映射
-	clientMap map[uint]*Node = make(map[uint]*Node, 0)
 	//广播消息发送管道
 	udpSendChan chan []byte = make(chan []byte, 1024)
 	//读写锁
 	rwLocker sync.RWMutex
 )
-
-// 广播发送和接收协程
-func init() {
-	go udpSendProc()
-	go udpRecvProc()
-}
-
-// Chat 需要：发送者ID ，接受者ID ，消息类型，发送的内容，发送类型
-func Chat(writer http.ResponseWriter, request *http.Request) {
-	//1.获取参数并检验token等合法性
-	query := request.URL.Query()
-	userId, _ := strconv.Atoi(query.Get("userId"))
-	isvalida := true //checkToke()
-	//升级为websocket连接，进行token校验
-	conn, err := (&websocket.Upgrader{
-		//token 校验
-		CheckOrigin: func(r *http.Request) bool {
-			return isvalida
-		},
-	}).Upgrade(writer, request, nil)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	//2.保存连接
-	node := &Node{
-		Conn:      conn,
-		DataQueue: make(chan []byte, 50),
-		GroupSets: set.New(set.ThreadSafe),
-	}
-	rwLocker.Lock()
-	clientMap[uint(userId)] = node
-	rwLocker.Unlock()
-	//用户关系
-	//fmt.Println("userId=", userId)
-	//发送和接收逻辑
-	go sendProc(node)
-	go recvProc(node)
-	//加入在线用户到缓存
-	//SetUserOnlineInfo("online_"+Id, []byte(node.Addr), time.Duration(viper.GetInt("timeout.RedisOnlineTime"))*time.Hour)
-	sendMsg(uint(userId), []byte("欢迎进入聊天系统"))
-}
 
 // 发送逻辑
 func sendProc(node *Node) {
@@ -115,7 +63,7 @@ func recvProc(node *Node) {
 		}
 		//广播发送消息给所有用户
 		udpSendChan <- data
-		fmt.Println("[ws]recvProc <<<<", string(data))
+		//fmt.Println("[ws]recvProc <<<<", string(data))
 	}
 }
 
@@ -178,6 +126,7 @@ func udpSendProc() {
 func dispatch(data []byte) {
 	msg := Message{}
 	err := json.Unmarshal(data, &msg)
+	msg.CreateTime = uint64(time.Now().Unix())
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -185,13 +134,20 @@ func dispatch(data []byte) {
 	switch msg.Type {
 	case 1: //私信
 		fmt.Println("dispatch data:", string(data))
-		sendMsg(msg.TargetId, data)
+		sendMsg(msg.UserId, msg.TargetId, data)
 	case 2: //群发
 		sendGroupMsg(msg.UserId, msg.TargetId, data)
-	case 3:
-		//sendAllMsg()
+	case 3: //心跳
+		sendHeartBeatMsg(msg.UserId)
 	case 4:
 	}
+}
+
+// 心跳
+func sendHeartBeatMsg(userId uint) {
+	node := clientMap[userId]
+	currentTime := uint64(time.Now().Unix())
+	node.HearBeat(currentTime)
 }
 
 // 群发
@@ -206,17 +162,22 @@ func sendGroupMsg(userId uint, groupId uint, msg []byte) {
 			continue
 		}
 		fmt.Println("sendGroupMsg to: ", v.OwnerId)
-		sendMsg(v.OwnerId, msg)
+		sendMsg(userId, v.OwnerId, msg)
 	}
 }
 
 // 私聊
-func sendMsg(targetId uint, msg []byte) {
+func sendMsg(userId uint, targetId uint, msg []byte) {
 	fmt.Println("sendMsg to targetId:", targetId, "msg:", string(msg))
 	rwLocker.RLock()
 	node, ok := clientMap[targetId]
 	rwLocker.RUnlock()
-	if ok {
-		node.DataQueue <- msg
+	//首先查询用户是否在线，只有在线才会向其发消息
+	if GetOnlineUser(targetId) {
+		if ok {
+			node.DataQueue <- msg
+		}
+	} else { //缓存离线消息
+		SetMessage(userId, targetId, msg)
 	}
 }
