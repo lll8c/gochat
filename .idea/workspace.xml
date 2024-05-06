@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1144e5c8-d2a7-4031-8ebc-f25fe1ed7003" name="Changes" comment="群发消息">
-      <change afterPath="$PROJECT_DIR$/models/node.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/models/redis_cache.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/task_init.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/config.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/userservice.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/userservice.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/message.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/redis_cache.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/redis_cache.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/concat.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/concat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/chat/foot.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/foot.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,6 +27,7 @@
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../.." />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />

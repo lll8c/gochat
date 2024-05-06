@@ -41,3 +41,10 @@ func GetOnlineUser(targetId uint) bool {
 	}
 	return true
 }
+
+func GetRedisMsg(userId uint, targetId uint) (r []string, err error) {
+	ctx := context.Background()
+	key := fmt.Sprintf("msg_%d_%d", userId, targetId)
+	r, err = utils.Rdb.ZRange(ctx, key, 0, -1).Result()
+	return
+}

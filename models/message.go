@@ -181,3 +181,15 @@ func sendMsg(userId uint, targetId uint, msg []byte) {
 		SetMessage(userId, targetId, msg)
 	}
 }
+
+// RedisMsg 离线消息推送
+func RedisMsg(userId uint, targetId uint) {
+	r, err := GetRedisMsg(userId, targetId)
+	if err != nil {
+		fmt.Println("没有离线消息")
+		return
+	}
+	for _, v := range r {
+		sendMsg(userId, targetId, []byte(v))
+	}
+}

@@ -240,3 +240,9 @@ func MsgHandler(conn *websocket.Conn, c *gin.Context) {
 func SendUserMsg(c *gin.Context) {
 
 }
+
+func RedisMsg(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.PostForm("userId"))
+	targetId, _ := strconv.Atoi(c.PostForm("targetId"))
+	models.RedisMsg(uint(userId), uint(targetId))
+}

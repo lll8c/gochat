@@ -49,8 +49,8 @@ func Router() *gin.Engine {
 	//上传文件
 	r.POST("/attach/upload", controller.Upload)
 
-	//心跳续命
-	//r.POST("/user/redisMsg", controller.RedisMsg)
+	//离线消息推送
+	r.POST("/user/redisMsg", controller.RedisMsg)
 
 	// 启动HTTP服务，默认在0.0.0.0:8080启动服务
 	return r
