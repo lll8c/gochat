@@ -27,6 +27,6 @@ redis:
 timeout:
   DelayHeartBeatTime: 3   #刚开始进行心跳检测的延迟时间
   HeartBeatMaxTime: 30    #连接最大保留时间
-  HeartBeatHZ: 30          #多久检测一次心跳时间
+  HeartBeatHZ: 30         #多久检测一次心跳时间
   RedisOnlineTime: 4      #缓存的在线用户时长 h
 

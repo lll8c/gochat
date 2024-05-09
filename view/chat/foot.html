@@ -49,7 +49,7 @@
                         choosed:{"pkgid":"emoj","assets":[],"size":"small"}
                     },
                     msglist:[],
-
+                    isReadRedisMsg:[],  //是否已读取某个用户的缓存
                     msgcontext:{
                         TargetId:10,
                         Type:1,
@@ -287,6 +287,17 @@
                     singlemsg:function(user){
                         if(this.isDisable) {
                             this.setTimeFlag()
+                            //首次读取某个用户的消息记录
+                            if (this.isReadRedisMsg.filter(item => item === user.ID).length <= 0) {
+                                post("user/redisMsg", { userIdA: userId(), userIdB: user.ID, start: this.start, end: this.end, isRev: false }, function (res) {
+                                    //循环读取的消息记录 并显示
+                                    for (var i in res.Rows) {
+                                        this.showmsg(user, JSON.parse(res.Rows[i]), false, true)
+                                    }
+                                }.bind(this))
+                                this.isReadRedisMsg.push(user.ID)
+                            }
+
                             this.win = "single";
                             this.title = "和" + user.Name + "聊天中";
                             this.msgcontext.TargetId = parseInt(user.ID);

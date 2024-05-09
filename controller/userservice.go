@@ -241,7 +241,11 @@ func SendUserMsg(c *gin.Context) {
 }
 
 func RedisMsg(c *gin.Context) {
-	userId, _ := strconv.Atoi(c.PostForm("userId"))
-	targetId, _ := strconv.Atoi(c.PostForm("targetId"))
-	models.RedisMsg(uint(userId), uint(targetId))
+	userIdA, _ := strconv.Atoi(c.PostForm("userIdA"))
+	userIdB, _ := strconv.Atoi(c.PostForm("userIdB"))
+	/*start, _ := strconv.Atoi(c.PostForm("start"))
+	end, _ := strconv.Atoi(c.PostForm("end"))
+	isRev, _ := strconv.ParseBool(c.PostForm("isRev"))*/
+	res := models.RedisMsg(uint(userIdA), uint(userIdB))
+	utils.RespOKList(c.Writer, res, "ok")
 }

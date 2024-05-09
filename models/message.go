@@ -183,16 +183,15 @@ func sendMsg(userId uint, targetId uint, msg []byte) {
 }
 
 // RedisMsg 缓存消息推送
-func RedisMsg(userIdA uint, userIdB uint) {
-	r, err := GetRedisMsg(userIdA, userIdB)
+func RedisMsg(userIdA uint, userIdB uint) []string {
+	res, err := GetRedisMsg(userIdA, userIdB)
 	if err != nil {
 		fmt.Println("没有离线消息")
-		return
+		return []string{}
 	}
-	fmt.Println(r)
-	//这里不能用sendMsg方法，不然又会去缓存
+	/*//这里不能用sendMsg方法，不然又会去缓存
 	for _, v := range r {
-		//消息有哪一方发送给哪一方
+		//哪一方发送给哪一方
 		msg := Message{}
 		json.Unmarshal([]byte(v), &msg)
 		userId := msg.UserId
@@ -205,5 +204,8 @@ func RedisMsg(userIdA uint, userIdB uint) {
 		rwLocker.RUnlock()
 		node1.DataQueue <- []byte(v)
 		node2.DataQueue <- []byte(v)
-	}
+	}*/
+	//直接返回给前端res
+	//fmt.Println(res)
+	return res
 }
