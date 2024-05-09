@@ -126,11 +126,11 @@ func udpSendProc() {
 func dispatch(data []byte) {
 	msg := Message{}
 	err := json.Unmarshal(data, &msg)
-	msg.CreateTime = uint64(time.Now().Unix())
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	msg.CreateTime = uint64(time.Now().Unix())
 	switch msg.Type {
 	case 1: //私信
 		fmt.Println("dispatch data:", string(data))
@@ -177,19 +177,33 @@ func sendMsg(userId uint, targetId uint, msg []byte) {
 		if ok {
 			node.DataQueue <- msg
 		}
-	} else { //缓存离线消息
-		SetMessage(userId, targetId, msg)
 	}
+	//缓存所有消息，下次登录时在获取
+	SetMessage(userId, targetId, msg)
 }
 
-// RedisMsg 离线消息推送
-func RedisMsg(userId uint, targetId uint) {
-	r, err := GetRedisMsg(userId, targetId)
+// RedisMsg 缓存消息推送
+func RedisMsg(userIdA uint, userIdB uint) {
+	r, err := GetRedisMsg(userIdA, userIdB)
 	if err != nil {
 		fmt.Println("没有离线消息")
 		return
 	}
+	fmt.Println(r)
+	//这里不能用sendMsg方法，不然又会去缓存
 	for _, v := range r {
-		sendMsg(userId, targetId, []byte(v))
+		//消息有哪一方发送给哪一方
+		msg := Message{}
+		json.Unmarshal([]byte(v), &msg)
+		userId := msg.UserId
+		targetId := msg.TargetId
+		rwLocker.RLock()
+		node1, _ := clientMap[targetId]
+		rwLocker.RUnlock()
+		rwLocker.RLock()
+		node2, _ := clientMap[userId]
+		rwLocker.RUnlock()
+		node1.DataQueue <- []byte(v)
+		node2.DataQueue <- []byte(v)
 	}
 }

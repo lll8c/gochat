@@ -53,6 +53,7 @@
                     msgcontext:{
                         TargetId:10,
                         Type:1,
+                        CreateTime : new Date().getTime(),
                         userId:userId()
                     },
                     plugins:[
@@ -113,12 +114,12 @@
                     this.loadcommunitys();
                     this.loaddoutures();
                     //每隔一段时间更新已在线用户心跳
-                    setInterval(this.heartbeat, 30*1000)
+                    setInterval(this.heartbeat, 20*1000)
                     var user = userInfo()
                     if(!!user){
                         this.profile.avatar = user.Avatar;
                         this.profile.nickname = user.Name;
-                        this.profile.memo = user.Phone;
+                        this.profile.memo = user.memo;
                     }
                     this.initwebsocket()
 
@@ -317,6 +318,19 @@
 
                         this.loaduserinfo(data.userId,function(user){
                             this.showmsg(user,data)
+                            this.friends.map((item) => {
+                                if(item.ID == data.userId) {
+                                    if(data.Media == 1) {
+                                        item.memo = data.Content
+                                    } else if (data.Media == 2) {
+                                        item.memo = "[表情]"
+                                    } else if (data.Media == 3) {
+                                        item.memo = "[音频]"
+                                    } else if (data.Media == 4) {
+                                        item.memo = "[图片]"
+                                    }
+                                }
+                            })
                         }.bind(this))
 
                     },
@@ -368,26 +382,26 @@
                     addfriend:function(){
                         var that = this;
                         //prompt
-                        mui.prompt('','请输入好友ID','加好友',['取消','确认'],function (e) {
+                        mui.prompt('','请输入好友名称','加好友',['取消','确认'],function (e) {
                             if (e.index == 1) {
-                                if (isNaN(e.value) || e.value <= 0) {
-                                    mui.toast('格式错误');
-                                }else{
+                                //if (isNaN(e.value) || e.value <= 0) {
+                                //    mui.toast('格式错误');
+                                //}else{
                                     //mui.toast(e.value);
                                     that._addfriend(e.value)
-                                }
+                                //}
                             }else{
                                 //mui.toast('您取消了入库');
                             }
                         },'div');
-                        document.querySelector('.mui-popup-input input').type = 'number';
+                        document.querySelector('.mui-popup-input input').type = 'text';
                     },
                     _addfriend:function(dstobj){
                         //解决一次点击，两次调用该函数的问题
                         if(this.isDisable) {
                             this.setTimeFlag()
                             var that = this
-                            post("contact/addFriend", {targetID: dstobj, userID: userId()}, function (res) {
+                            post("contact/addFriendByName", {targetName: dstobj, userID: userId()}, function (res) {
                                 if (res.Code == 0) {
                                     mui.toast("添加成功");
                                     that.loadfriends();

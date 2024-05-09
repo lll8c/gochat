@@ -4,11 +4,23 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1144e5c8-d2a7-4031-8ebc-f25fe1ed7003" name="Changes" comment="群发消息">
+    <list default="true" id="1144e5c8-d2a7-4031-8ebc-f25fe1ed7003" name="Changes" comment="离线消息推送">
+      <change afterPath="$PROJECT_DIR$/build.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/release/conf/config.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sql/gochat.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gochat.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gochat.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/contact.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/contact.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/userservice.go" beforeDir="false" afterPath="$PROJECT_DIR$/controller/userservice.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/contact.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/contact.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/message.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/message.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/node.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/node.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/redis_cache.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/redis_cache.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/chat/concat.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/concat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/chat/foot.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/chat/foot.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,17 +63,17 @@
     &quot;RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Go/project/src/gochat/asset&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Go/project/src/gochat/release&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Go\project\src\gochat\release" />
+      <recent name="D:\Go\project\src\gochat" />
+      <recent name="D:\Go\project\src\gochat\sql" />
       <recent name="D:\Go\project\src\gochat\asset" />
       <recent name="D:\Go\project\src\gochat\view\chat" />
-      <recent name="D:\Go\project\src\gochat" />
-      <recent name="D:\Go\project\src\project1" />
-      <recent name="D:\Go\project\src\project1\web\ajax" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Go\project\src\gochat\view\index" />
@@ -71,22 +83,13 @@
       <recent name="D:\Go\project\src\project1\web\templates\demo02" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build project1">
+  <component name="RunManager" selected="Go Build.go build project1/db/go-redis">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <working_directory value="$PROJECT_DIR$" />
       <kind value="PACKAGE" />
       <package value="gochat" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="go build gochat" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="gochat" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="gochat" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/main.go" />
       <method v="2" />
     </configuration>
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
@@ -107,22 +110,31 @@
       <filePath value="$PROJECT_DIR$/../project1/test.go" />
       <method v="2" />
     </configuration>
-    <configuration name="go build udp_client.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build project1/db/go-redis" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="project1" />
       <working_directory value="$PROJECT_DIR$/../project1" />
-      <kind value="FILE" />
-      <package value="gochat" />
+      <kind value="PACKAGE" />
+      <package value="project1/db/go-redis" />
       <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/../project1/net/client/udp_client.go" />
+      <filePath value="$PROJECT_DIR$/../project1/db/go-redis/goRedis.go" />
       <method v="2" />
     </configuration>
-    <configuration name="go build udp_server.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build project1/db/gorm" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="project1" />
       <working_directory value="$PROJECT_DIR$/../project1" />
-      <kind value="FILE" />
-      <package value="gochat" />
+      <kind value="PACKAGE" />
+      <package value="project1/db/gorm" />
       <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/../project1/net/server/udp_server.go" />
+      <filePath value="$PROJECT_DIR$/../project1/db/gorm/gorm.go" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build project1/db/sqlx" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="project1" />
+      <working_directory value="$PROJECT_DIR$/../project1" />
+      <kind value="PACKAGE" />
+      <package value="project1/db/sqlx" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/../project1/db/sqlx/sqlx.go" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
@@ -135,19 +147,19 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Go Build.go build project1/db/go-redis" />
+      <item itemvalue="Go Build.go build project1/db/gorm" />
+      <item itemvalue="Go Build.go build project1/db/sqlx" />
       <item itemvalue="Go Build.go build main.go" />
-      <item itemvalue="Go Build.go build gochat" />
       <item itemvalue="Go Build.go build project1" />
-      <item itemvalue="Go Build.go build udp_client.go" />
-      <item itemvalue="Go Build.go build udp_server.go" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build project1/db/go-redis" />
+        <item itemvalue="Go Build.go build project1/db/gorm" />
+        <item itemvalue="Go Build.go build project1/db/sqlx" />
         <item itemvalue="Go Build.go build project1" />
         <item itemvalue="Go Build.go build main.go" />
-        <item itemvalue="Go Build.go build gochat" />
-        <item itemvalue="Go Build.go build udp_client.go" />
-        <item itemvalue="Go Build.go build udp_server.go" />
       </list>
     </recent_temporary>
   </component>
@@ -185,7 +197,8 @@
     <MESSAGE value="first commit" />
     <MESSAGE value="上传文件" />
     <MESSAGE value="群发消息" />
-    <option name="LAST_COMMIT_MESSAGE" value="群发消息" />
+    <MESSAGE value="离线消息推送" />
+    <option name="LAST_COMMIT_MESSAGE" value="离线消息推送" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

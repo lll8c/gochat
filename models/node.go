@@ -74,7 +74,7 @@ func Chat(writer http.ResponseWriter, request *http.Request) {
 	go recvProc(node)
 	//加入在线用户到缓存
 	SetUserOnlineInfo(userId, []byte(node.Addr), time.Duration(viper.GetInt("timeout.RedisOnlineTime"))*time.Hour)
-	sendMsg(0, uint(userId), []byte("欢迎进入聊天系统"))
+	node.DataQueue <- []byte("欢迎进入聊天系统")
 }
 
 // HearBeat 更新用户心跳
@@ -105,6 +105,8 @@ func CleanConnection(param interface{}) (result bool) {
 		if node.IsHeartBeatTimeOut(currenTime) {
 			fmt.Println(id, "心跳超时，自动下线关闭连接")
 			node.Conn.Close()
+			//将用户从缓存中删除
+			DeleteUserOnline(id)
 		}
 	}
 	return result

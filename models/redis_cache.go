@@ -21,11 +21,11 @@ func SetUserOnlineInfo(userId int, val []byte, timeTTL time.Duration) {
 	}
 }
 
-// SetMessage 缓存离线消息
-func SetMessage(userId uint, targetId uint, msg []byte) {
+// DeleteUserOnline 用户下线后，将用户从缓存中删除
+func DeleteUserOnline(userId uint) {
 	ctx := context.Background()
-	key := fmt.Sprintf("msg_%d_%d", userId, targetId)
-	utils.Rdb.ZAdd(ctx, key, &redis.Z{1, msg})
+	key := "online_" + strconv.Itoa(int(userId))
+	utils.Rdb.Del(ctx, key)
 }
 
 // GetOnlineUser 判断目标用户是否在线
@@ -42,9 +42,29 @@ func GetOnlineUser(targetId uint) bool {
 	return true
 }
 
+// SetMessage 缓存离线消息
+func SetMessage(userId uint, targetId uint, msg []byte) {
+	ctx := context.Background()
+	//双方互相发送的消息共用一个key
+	var key string
+	if userId < targetId {
+		key = fmt.Sprintf("msg_%d_%d", userId, targetId)
+	} else {
+		key = fmt.Sprintf("msg_%d_%d", targetId, userId)
+	}
+	result, _ := utils.Rdb.ZRange(ctx, key, 0, -1).Result()
+	len := float64(len(result) + 1)
+	utils.Rdb.ZAdd(ctx, key, &redis.Z{len, msg})
+}
+
 func GetRedisMsg(userId uint, targetId uint) (r []string, err error) {
 	ctx := context.Background()
-	key := fmt.Sprintf("msg_%d_%d", userId, targetId)
+	var key string
+	if userId < targetId {
+		key = fmt.Sprintf("msg_%d_%d", userId, targetId)
+	} else {
+		key = fmt.Sprintf("msg_%d_%d", targetId, userId)
+	}
 	r, err = utils.Rdb.ZRange(ctx, key, 0, -1).Result()
 	return
 }

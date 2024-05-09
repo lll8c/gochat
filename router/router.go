@@ -37,19 +37,20 @@ func Router() *gin.Engine {
 	r.POST("/user/find", controller.FindById)
 
 	//添加好友
-	r.POST("/contact/addFriend", controller.AddFriend)
+	r.POST("/contact/addFriendById", controller.AddFriendById)
+	r.POST("/contact/addFriendByName", controller.AddFriendByName)
 	//创建群
 	r.POST("/contact/createCommunity", controller.CreateCommunity)
 	//加入群
 	r.POST("/contact/joinGroup", controller.JoinGroup)
 
-	//发送消息
+	/*//发送消息
 	r.GET("/user/sendMsg", controller.SendMsg)
-	r.GET("/user/sendUserMsg", controller.SendUserMsg)
+	r.GET("/user/sendUserMsg", controller.SendUserMsg)*/
 	//上传文件
 	r.POST("/attach/upload", controller.Upload)
 
-	//离线消息推送
+	//缓存消息推送
 	r.POST("/user/redisMsg", controller.RedisMsg)
 
 	// 启动HTTP服务，默认在0.0.0.0:8080启动服务

@@ -1,4 +1,4 @@
-name: "gochat"
+name: "web_app"
 mode: "dev"
 port: 8080
 version: "v0.0.1"
@@ -15,18 +15,21 @@ log:
   max_backups: 7
 mysql:
   dsn: "root:123@tcp(127.0.0.1:3306)/gochat?charset=utf8mb4&parseTime=True&loc=Local"
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "123"
   dbname: "gochat"
   max_open_conns: 200
   max_idle_conns: 10
 redis:
-  addr: "192.168.158.11:6379"
+  addr: "127.0.0.1:6379"
   password: ""
   db: 0
   pool_size: 30
   min_idle_conns: 30
 timeout:
   DelayHeartBeatTime: 3   #刚开始进行心跳检测的延迟时间
-  HeartBeatMaxTime: 30    #连接最大保留时间
+  HeartBeatMaxTime: 30000    #连接最大保留时间
   HeartBeatHZ: 30          #多久检测一次心跳时间
   RedisOnlineTime: 4      #缓存的在线用户时长 h
-

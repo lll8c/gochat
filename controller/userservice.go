@@ -155,7 +155,6 @@ func DeleteUser(c *gin.Context) {
 		"message": "删除用户成功！",
 		"data":    user,
 	})
-
 }
 
 // UpdateUser
